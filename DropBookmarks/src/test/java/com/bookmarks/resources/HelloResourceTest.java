@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class HelloResourceTest {
 
     private static final HttpAuthenticationFeature FEATURE = HttpAuthenticationFeature.basic("u", "p");
-    
+
     // https://www.dropwizard.io/0.9.2/docs/manual/auth.html
     private static final Authenticator<BasicCredentials, User> AUTHENTICATOR = new Authenticator<BasicCredentials, User>(){
 

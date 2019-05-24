@@ -1,0 +1,13 @@
+# application configuration settings, passed in as an argument when the app is run
+
+password: super_secure
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+    - type: https
+      port: 8443
+      keyStorePath: dropbookmarks.keystore
+      keyStorePassword: super_secure
+      validateCerts: false # start app even if expired cert was provided

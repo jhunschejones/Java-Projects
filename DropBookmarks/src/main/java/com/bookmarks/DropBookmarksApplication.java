@@ -34,7 +34,7 @@ public class DropBookmarksApplication extends Application<DropBookmarksConfigura
         );
         environment.jersey().register(new AuthDynamicFeature(
                 new BasicCredentialAuthFilter.Builder<User>()
-                        .setAuthenticator(new HelloAccess())
+                        .setAuthenticator(new HelloAccess(configuration.getPassword()))
                         .setRealm("SECURITY REALM")
                         .buildAuthFilter()));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));

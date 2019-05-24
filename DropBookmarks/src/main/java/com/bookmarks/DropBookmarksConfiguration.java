@@ -6,5 +6,12 @@ import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.*;
 
 public class DropBookmarksConfiguration extends Configuration {
-    // TODO: implement service configuration
+    // prevent application from starting if no value found in config.yml
+    @NotEmpty
+    private String password;
+
+    @JsonProperty
+    public String getPassword() {
+        return password;
+    }
 }
