@@ -1,12 +1,14 @@
 package com.bookmarks;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
@@ -23,13 +25,20 @@ public class AccessIntegrationTest {
             new DropwizardAppRule<DropBookmarksConfiguration>(DropBookmarksApplication.class, CONFIG_PATH);
 
     private static final HttpAuthenticationFeature FEATURE = HttpAuthenticationFeature.basic("username", "super_secure");
-    private static final String TARGET = "http://localhost:8080";
+    private static final String TARGET = "https://localhost:8443";
     private static final String PATH = "/hello/secure";
+    private static final String TRUST_STORE_FILE = "dropbookmarks.keystore";
+    private static final String TRUST_STORE_PASSWORD = "super_secure";
+
     private Client client;
 
     @Before
     public void setup() {
-        client= ClientBuilder.newClient();
+        SslConfigurator configurator = SslConfigurator.newInstance();
+        configurator.trustStoreFile(TRUST_STORE_FILE).trustStorePassword(TRUST_STORE_PASSWORD);
+        SSLContext context = configurator.createSSLContext();
+
+        client = ClientBuilder.newBuilder().sslContext(context).build();
     }
 
     @After

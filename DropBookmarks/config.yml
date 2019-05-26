@@ -11,3 +11,9 @@ server:
       keyStorePath: dropbookmarks.keystore
       keyStorePassword: super_secure
       validateCerts: false # start app even if expired cert was provided
+
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+#  password: 1
+  url: jdbc:mysql://localhost:3306/DropBookmarks

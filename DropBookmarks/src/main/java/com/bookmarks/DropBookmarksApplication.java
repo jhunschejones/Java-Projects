@@ -4,9 +4,12 @@ import com.bookmarks.access.HelloAccess;
 import com.bookmarks.core.User;
 import com.bookmarks.resources.HelloResource;
 import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.db.PooledDataSourceFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -23,7 +26,12 @@ public class DropBookmarksApplication extends Application<DropBookmarksConfigura
 
     @Override
     public void initialize(final Bootstrap<DropBookmarksConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle(new MigrationsBundle<DropBookmarksConfiguration>() {
+            @Override
+            public PooledDataSourceFactory getDataSourceFactory(DropBookmarksConfiguration configuration) {
+                return configuration.getDataSourceFactory();
+            }
+        });
     }
 
     @Override
