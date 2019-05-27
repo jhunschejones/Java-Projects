@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="jjones">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <comment>A script to create the users table</comment>
+    </changeSet>
+
+    <changeSet id="2" author="jjones">
+        <createTable tableName="bookmarks">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="bookmarks"
+                                 constraintName="fk_users_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <comment>A script to create the bookmarks table</comment>
+    </changeSet>
+
+    <changeSet id="3" author="jjones">
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="username" value="carl"/>
+            <column name="password" value="super_secure"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="username" value="daisy"/>
+            <column name="password" value="super_secure"/>
+        </insert>
+        <!-- use rollback tag for data insert changesets and table drop changesets -->
+        <rollback>
+            <delete tableName="users"><where>id=1</where></delete>
+            <delete tableName="users"><where>id=2</where></delete>
+        </rollback>
+        <comment>A script to add two test users</comment>
+    </changeSet>
+
+    <changeSet id="4" author="jjones">
+        <insert tableName="bookmarks">
+            <column name="id" value="1"/>
+            <column name="name" value="Liquibase"/>
+            <column name="url" value="https://www.liquibase.org"/>
+            <column name="description" value="Refrence docs for Liquibase"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="bookmarks">
+            <column name="id" value="2"/>
+            <column name="name" value="DropWizard"/>
+            <column name="url" value="https://www.dropwizard.io/0.9.2/docs/"/>
+            <column name="description" value="Refrence docs for the version of DropWizard used in this tutorial"/>
+            <column name="user_id" value="1"/>
+        </insert>
+        <insert tableName="bookmarks">
+            <column name="id" value="3"/>
+            <column name="name" value="Ruby"/>
+            <column name="url" value="https://ruby-doc.org/core-2.6.3/"/>
+            <column name="description" value="Ruby documentations for v2.6.3, current stable release"/>
+            <column name="user_id" value="2"/>
+        </insert>
+        <!-- use rollback tag for data insert changesets and table drop changesets -->
+        <rollback>
+            <delete tableName="bookmarks"><where>id=1</where></delete>
+            <delete tableName="bookmarks"><where>id=2</where></delete>
+            <delete tableName="bookmarks"><where>id=3</where></delete>
+        </rollback>
+        <comment>A script to add three test bookmarks</comment>
+    </changeSet>
+</databaseChangeLog>
