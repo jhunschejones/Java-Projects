@@ -3,7 +3,9 @@ package com.bookmarks;
 import com.bookmarks.auth.DBAuthenticator;
 import com.bookmarks.core.Bookmark;
 import com.bookmarks.core.User;
+import com.bookmarks.db.BookmarkDAO;
 import com.bookmarks.db.UserDAO;
+import com.bookmarks.resources.BookmarksResource;
 import com.bookmarks.resources.HelloResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -48,7 +50,9 @@ public class DropBookmarksApplication extends Application<DropBookmarksConfigura
     public void run(final DropBookmarksConfiguration configuration, final Environment environment) {
 
         final UserDAO userDAO = new UserDAO(hibernateBundle.getSessionFactory());
+        final BookmarkDAO bookmarkDAO = new BookmarkDAO(hibernateBundle.getSessionFactory());
 
+        environment.jersey().register(new BookmarksResource(bookmarkDAO));
         environment.jersey().register(new HelloResource());
         environment.jersey().register(
                 AuthFactory.binder(new BasicAuthFactory<>(
