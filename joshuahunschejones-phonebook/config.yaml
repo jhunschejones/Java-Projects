@@ -1,1 +1,7 @@
 message: This is a message defined in the configuration file config.yaml.
+
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: phonebookuser
+  password: phonebookpassword
+  url: jdbc:mysql://localhost/phonebook
