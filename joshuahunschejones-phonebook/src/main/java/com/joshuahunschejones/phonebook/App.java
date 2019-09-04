@@ -1,7 +1,10 @@
 package com.joshuahunschejones.phonebook;
 
+import com.joshuahunschejones.resources.ClientResource;
 import com.joshuahunschejones.resources.ContactResource;
+import com.sun.jersey.api.client.Client;
 import io.dropwizard.Application;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -27,6 +30,9 @@ public class App extends Application<PhonebookConfiguration> {
         System.out.println(c.getMessage());
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "mysql");
-        e.jersey().register(new ContactResource(jdbi));
+        e.jersey().register(new ContactResource(jdbi, e.getValidator()));
+
+        final Client client = new JerseyClientBuilder(e).build("REST Client");
+        e.jersey().register(new ClientResource(client));
     }
 }
