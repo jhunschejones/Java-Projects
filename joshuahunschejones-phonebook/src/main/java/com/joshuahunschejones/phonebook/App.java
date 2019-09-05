@@ -1,9 +1,14 @@
 package com.joshuahunschejones.phonebook;
 
+import com.google.common.cache.CacheBuilderSpec;
 import com.joshuahunschejones.resources.ClientResource;
 import com.joshuahunschejones.resources.ContactResource;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import io.dropwizard.Application;
+import io.dropwizard.auth.CachingAuthenticator;
+import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -32,7 +37,16 @@ public class App extends Application<PhonebookConfiguration> {
         final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "mysql");
         e.jersey().register(new ContactResource(jdbi, e.getValidator()));
 
+        // authenticator with caching support
+        CachingAuthenticator<BasicCredentials, Boolean> authenticator = new CachingAuthenticator<BasicCredentials, Boolean>(
+                e.metrics(),
+                new PhonebookAuthenticator(jdbi),
+                CacheBuilderSpec.parse("maximumSize=10000, expireAfterAccess=10m"));
+        e.jersey().register(new BasicAuthProvider<Boolean>(authenticator, "Web Service Realm"));
+
+        // basic browser-based client, normally this wouldn't be in the same project
         final Client client = new JerseyClientBuilder(e).build("REST Client");
+        client.addFilter(new HTTPBasicAuthFilter("clientuser", "clientpassword"));
         e.jersey().register(new ClientResource(client));
     }
 }

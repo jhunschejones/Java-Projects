@@ -2,6 +2,7 @@ package com.joshuahunschejones.resources;
 
 import com.joshuahunschejones.dao.ContactDAO;
 import com.joshuahunschejones.representations.Contact;
+import io.dropwizard.auth.Auth;
 import org.skife.jdbi.v2.DBI;
 
 import javax.validation.ConstraintViolation;
@@ -29,7 +30,7 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    public Response getContact(@PathParam("id") int id) {
+    public Response getContact(@PathParam("id") int id, @Auth Boolean isAuthenticated) {
         Contact contact = contactDao.getContactById(id);
         return Response
             .ok(contact)
@@ -37,7 +38,7 @@ public class ContactResource {
     }
 
     @POST
-    public Response createContact(Contact contact) throws URISyntaxException {
+    public Response createContact(Contact contact, @Auth Boolean isAuthenticated) throws URISyntaxException {
         // validate new contact
         Set<ConstraintViolation<Contact>> violations = validator.validate(contact);
         if (violations.size() > 0) {
@@ -57,7 +58,7 @@ public class ContactResource {
 
     @PUT
     @Path("/{id}")
-    public Response updateContact(@PathParam("id") int id, Contact contact) {
+    public Response updateContact(@PathParam("id") int id, Contact contact, @Auth Boolean isAuthenticated) {
         // validate contact updates
         Set<ConstraintViolation<Contact>> violations = validator.validate(contact);
         if (violations.size() > 0) {
@@ -79,7 +80,7 @@ public class ContactResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteContact(@PathParam("id") int id) {
+    public Response deleteContact(@PathParam("id") int id, @Auth Boolean isAuthenticated) {
         contactDao.deleteContact(id);
         return Response.noContent().build();
     }
