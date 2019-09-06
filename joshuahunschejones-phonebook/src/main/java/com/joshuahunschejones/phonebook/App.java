@@ -13,6 +13,7 @@ import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,8 @@ public class App extends Application<PhonebookConfiguration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     @Override
-    public void initialize(Bootstrap<PhonebookConfiguration> bootstrap) {
-
+    public void initialize(Bootstrap<PhonebookConfiguration> b) {
+        b.addBundle(new ViewBundle());
     }
 
     @Override

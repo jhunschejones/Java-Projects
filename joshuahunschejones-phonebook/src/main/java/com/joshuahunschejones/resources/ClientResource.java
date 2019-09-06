@@ -3,10 +3,11 @@ package com.joshuahunschejones.resources;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
+import com.joshuahunschejones.phonebook.views.ContactView;
 import com.joshuahunschejones.representations.Contact;
 import com.sun.jersey.api.client.*;
 
-@Produces(MediaType.TEXT_PLAIN)
+@Produces(MediaType.TEXT_HTML)
 @Path("/client")
 public class ClientResource {
 
@@ -18,11 +19,10 @@ public class ClientResource {
 
     @GET
     @Path("showContact")
-    public String showContact(@QueryParam("id") int id) {
+    public ContactView showContact(@QueryParam("id") int id) {
         WebResource contactResource = client.resource("http://localhost:8080/contact/" + id);
         Contact c = contactResource.get(Contact.class);
-        String output = "ID: " + id + "\nFirst name: " + c.getFirstName() + "\nLast name: " + c.getLastName() + "\nPhone: " + c.getPhone();
-        return output;
+        return new ContactView(c);
     }
 
     @GET
