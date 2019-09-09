@@ -1,6 +1,7 @@
 package com.joshuahunschejones.phonebook;
 
 import com.google.common.cache.CacheBuilderSpec;
+import com.joshuahunschejones.phonebook.health.NewContactHealthCheck;
 import com.joshuahunschejones.resources.ClientResource;
 import com.joshuahunschejones.resources.ContactResource;
 import com.sun.jersey.api.client.Client;
@@ -49,5 +50,8 @@ public class App extends Application<PhonebookConfiguration> {
         final Client client = new JerseyClientBuilder(e).build("REST Client");
         client.addFilter(new HTTPBasicAuthFilter("clientuser", "clientpassword"));
         e.jersey().register(new ClientResource(client));
+
+        // add basic health check
+        e.healthChecks().register("New Contact health check", new NewContactHealthCheck(client));
     }
 }

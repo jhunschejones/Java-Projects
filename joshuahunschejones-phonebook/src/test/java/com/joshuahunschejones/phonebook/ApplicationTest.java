@@ -1,0 +1,45 @@
+package com.joshuahunschejones.phonebook;
+
+import com.joshuahunschejones.representations.Contact;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+import static org.fest.assertions.api.Assertions.assertThat;
+
+import javax.ws.rs.core.MediaType;
+
+public class ApplicationTest {
+    private Client client;
+
+    private Contact contactForTest = new Contact(0, "Jane", "Doe", "+987654321");
+
+    @ClassRule
+    public static final DropwizardAppRule<PhonebookConfiguration> RULE =
+            new DropwizardAppRule<PhonebookConfiguration>(App.class, "config.yaml");
+
+    @Before
+    public void setUp() {
+        client = new Client();
+        client.addFilter(new HTTPBasicAuthFilter("testclientuser", "testclientpassword"));
+    }
+
+    @Test
+    public void createAndRetrieveContact() {
+        WebResource contactResource = client.resource("http://localhost:8080/contact");
+        ClientResponse response = contactResource.type(MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, contactForTest);
+        assertThat(response.getStatus()).isEqualTo(201);
+
+        String newContactURL = response.getHeaders().get("Location").get(0);
+        WebResource newContactResource = client.resource(newContactURL);
+        Contact contact = newContactResource.get(Contact.class);
+        assertThat(contact.getFirstName()).isEqualTo(contactForTest.getFirstName());
+        assertThat(contact.getLastName()).isEqualTo(contactForTest.getLastName());
+        assertThat(contact.getPhone()).isEqualTo(contactForTest.getPhone());
+    }
+}
