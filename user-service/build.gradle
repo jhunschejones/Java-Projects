@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'com.joshuahunschejones'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "io.dropwizard:dropwizard-core:${project['dropwizard.version']}"
+    compile "io.dropwizard:dropwizard-jdbi3:${project['dropwizard.version']}"
+    compile "io.dropwizard:dropwizard-hibernate:${project['dropwizard.version']}"
+    compile "mysql:mysql-connector-java:${project['mysql-connector.version']}"
+    testCompile "junit:junit:${project['junit.version']}"
+}
+
+task run(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.joshuahunschejones.Application'
+    args 'server', 'config.yml'
+}
