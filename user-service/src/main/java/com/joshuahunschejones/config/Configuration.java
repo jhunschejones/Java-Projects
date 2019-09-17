@@ -8,20 +8,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class Configuration extends io.dropwizard.Configuration {
-    @NotEmpty
-    private String version;
-
-    @JsonProperty
-    public String getVersion() {
-        return version;
-    }
-
-    @JsonProperty
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-
     /**
      * A factory used to connect to a relational database management system.
      * Factories are used by Dropwizard to group together related configuration
@@ -30,7 +16,6 @@ public class Configuration extends io.dropwizard.Configuration {
     @NotNull
     @Valid
     private DataSourceFactory dataSourceFactory = new DataSourceFactory();
-
 
     /**
      * A getter for the database factory.

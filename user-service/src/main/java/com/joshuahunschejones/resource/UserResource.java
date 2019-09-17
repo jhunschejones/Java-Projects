@@ -37,6 +37,12 @@ public class UserResource {
         }
     }
 
+    @POST
+    @UnitOfWork
+    public User saveUser(User user) {
+        return userDAO.save(user);
+    }
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork
@@ -47,11 +53,5 @@ public class UserResource {
             userDAO.delete(user.get());
         }
         return user;
-    }
-
-    @POST
-    @UnitOfWork
-    public User saveUser(User user) {
-        return userDAO.save(user);
     }
 }
