@@ -1,6 +1,5 @@
 package com.joshuahunschejones.resource;
 
-import com.google.common.base.Optional;
 import com.joshuahunschejones.User;
 import com.joshuahunschejones.UserDAO;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -9,6 +8,7 @@ import io.dropwizard.jersey.params.LongParam;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.Optional;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)

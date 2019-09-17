@@ -1,10 +1,10 @@
 package com.joshuahunschejones;
 
-import com.google.common.base.Optional;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserDAO extends AbstractDAO<User> {
 
@@ -13,18 +13,17 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public List<User> findAll() {
-        return list(namedQuery("User.findAll"));
+        return (List<User>) list(namedQuery("User.findAll"));
     }
 
     public List<User> findByName(String name) {
         StringBuilder builder = new StringBuilder("%");
         builder.append(name).append("%");
-        return list(namedQuery("User.findByName").setParameter("name", builder.toString())
-        );
+        return (List<User>) list(namedQuery("User.findByName").setParameter("name", builder.toString()));
     }
 
     public Optional<User> findById(long id) {
-        return Optional.fromNullable(get(id));
+        return Optional.ofNullable(get(id));
     }
 
     public User save(User user) {

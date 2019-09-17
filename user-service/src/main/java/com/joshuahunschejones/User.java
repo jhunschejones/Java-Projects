@@ -1,7 +1,5 @@
 package com.joshuahunschejones;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 
 @Entity
@@ -27,7 +25,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    // empty constructior required by Jackson deserialization
+    // empty constructor required by Jackson deserialization
     public User() {
 
     }

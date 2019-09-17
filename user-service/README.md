@@ -11,6 +11,7 @@ To launch the application, clone this folder and run:
 Routes:
 * POST to `http://localhost:8080/users`: Create a user
 * GET `http://localhost:8080/users/{id}`: Fetch user by ID
+* GET `http://localhost:8080/users?name=Josh`: Find user by name
 * GET `http://localhost:8080/users`: List all users
 * DELETE `http://localhost:8080/users/{id}`: Delete a user
 
