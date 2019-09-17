@@ -43,6 +43,22 @@ public class UserResource {
         return userDAO.save(user);
     }
 
+    @PUT
+    @Path("/{id}")
+    @UnitOfWork
+    public User updateUser(@PathParam("id") LongParam id, User updatedUser) {
+        Optional<User> user = userDAO.findById(id.get());
+
+        if (user.isPresent()) {
+            user.get().setFirstName(updatedUser.getFirstName());
+            user.get().setLastName(updatedUser.getLastName());
+            user.get().setEmail(updatedUser.getEmail());
+            return userDAO.save(user.get());
+        } else {
+            return userDAO.save(updatedUser);
+        }
+    }
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork
