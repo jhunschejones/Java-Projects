@@ -30,6 +30,6 @@ public class Application extends io.dropwizard.Application<Configuration> {
         final UserDAO userDAO = new UserDAO(hibernateBundle.getSessionFactory());
         environment.jersey().register(new UserResource(userDAO));
 
-        environment.healthChecks().register("APIHealthCheck", new AppHealthCheck());
+        environment.healthChecks().register("HealthCheck", new HealthCheck());
     }
 }

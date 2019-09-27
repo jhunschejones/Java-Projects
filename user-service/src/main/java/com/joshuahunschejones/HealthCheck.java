@@ -1,14 +1,12 @@
 package com.joshuahunschejones;
 
-import com.codahale.metrics.health.HealthCheck;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AppHealthCheck extends HealthCheck {
+public class HealthCheck extends com.codahale.metrics.health.HealthCheck {
     @Inject
-    public AppHealthCheck() {
+    public HealthCheck() {
     }
 
     @Override
