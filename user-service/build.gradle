@@ -14,7 +14,6 @@ repositories {
 dependencies {
     compile "io.dropwizard:dropwizard-core:${project['dropwizard.version']}"
     compile "io.dropwizard:dropwizard-jdbi3:${project['dropwizard.version']}"
-    compile "io.dropwizard:dropwizard-hibernate:${project['dropwizard.version']}"
     compile "mysql:mysql-connector-java:${project['mysql-connector.version']}"
     testCompile "junit:junit:${project['junit.version']}"
 }

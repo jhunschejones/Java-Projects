@@ -11,11 +11,11 @@ To launch the application, clone this folder and run:
 Routes:
 * POST to `http://localhost:8080/users`: Create a user
 * GET `http://localhost:8080/users/{id}`: Fetch user by ID
-* GET `http://localhost:8080/users?name={name}`: Find user by name
+* GET `http://localhost:8080/users?name={name}`: Find user by first or last name
 * PUT `http://localhost:8080/users/{id}`: Update user by ID
 * GET `http://localhost:8080/users`: List all users
 * DELETE `http://localhost:8080/users/{id}`: Delete a user
-* GET `http://localhost:8081/healthcheck`: basic app health check
+* GET `http://localhost:8081/healthcheck`: basic API and MySQL health checks
 
 To create or update a user, submit a JSON payload with the following content:
 

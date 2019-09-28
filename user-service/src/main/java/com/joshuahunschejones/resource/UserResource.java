@@ -2,7 +2,6 @@ package com.joshuahunschejones.resource;
 
 import com.joshuahunschejones.User;
 import com.joshuahunschejones.UserDAO;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 
 import javax.ws.rs.*;
@@ -22,51 +21,54 @@ public class UserResource {
 
     @GET
     @Path("/{id}")
-    @UnitOfWork
     public Optional<User> getUser(@PathParam("id") LongParam id) {
         return userDAO.findById(id.get());
     }
 
     @GET
-    @UnitOfWork
     public List<User> findByName(@QueryParam("name") Optional<String> name) {
         if (name.isPresent()) {
-            return userDAO.findByName(name.get());
+            return userDAO.findByName("%" + name.get() + "%");
         } else {
             return userDAO.findAll();
         }
     }
 
     @POST
-    @UnitOfWork
-    public User saveUser(User user) {
-        return userDAO.save(user);
+    public Optional<User> saveUser(User user) {
+        if (userDAO.create(user) > 0) {
+            return Optional.of(user);
+        }
+        return Optional.empty();
     }
 
     @PUT
     @Path("/{id}")
-    @UnitOfWork
-    public User updateUser(@PathParam("id") LongParam id, User updatedUser) {
-        Optional<User> user = userDAO.findById(id.get());
+    public Optional<User> updateUser(@PathParam("id") long id, User updatedUser) {
+        Optional<User> user = userDAO.findById(id);
 
         if (user.isPresent()) {
             user.get().setFirstName(updatedUser.getFirstName());
             user.get().setLastName(updatedUser.getLastName());
             user.get().setEmail(updatedUser.getEmail());
-            return userDAO.save(user.get());
+            if (userDAO.updateById(user.get()) > 0) {
+                return Optional.of(user.get());
+            } else {
+                return Optional.empty();
+            }
         } else {
-            return userDAO.save(updatedUser);
+            userDAO.create(updatedUser);
+            return Optional.of(updatedUser);
         }
     }
 
     @DELETE
     @Path("/{id}")
-    @UnitOfWork
     public Optional<User> delete(@PathParam("id")LongParam id) {
         Optional<User> user = userDAO.findById(id.get());
 
         if (user.isPresent()) {
-            userDAO.delete(user.get());
+            userDAO.deleteById(id.get());
         }
         return user;
     }

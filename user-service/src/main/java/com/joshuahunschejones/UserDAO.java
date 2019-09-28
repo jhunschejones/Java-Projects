@@ -1,36 +1,32 @@
 package com.joshuahunschejones;
 
-import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.SessionFactory;
+import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
+import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
+import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 import java.util.List;
 import java.util.Optional;
 
-public class UserDAO extends AbstractDAO<User> {
+@RegisterRowMapper(UserRowMapper.class)
+public interface UserDAO {
 
-    public UserDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
-    }
+    @SqlQuery("SELECT * FROM users")
+    List<User> findAll();
 
-    public List<User> findAll() {
-        return (List<User>) list(namedQuery("User.findAll"));
-    }
+    @SqlQuery("SELECT * FROM users WHERE first_name LIKE :name OR last_name LIKE :name")
+    List<User> findByName(@Bind("name") String name);
 
-    public List<User> findByName(String name) {
-        StringBuilder builder = new StringBuilder("%");
-        builder.append(name).append("%");
-        return (List<User>) list(namedQuery("User.findByName").setParameter("name", builder.toString()));
-    }
+    @SqlQuery("SELECT * FROM users WHERE id = :id")
+    Optional<User> findById(@Bind("id") long id);
 
-    public Optional<User> findById(long id) {
-        return Optional.ofNullable(get(id));
-    }
+    @SqlUpdate("INSERT INTO users(first_name, last_name, email) VALUES(:firstName, :lastName, :email)")
+    int create(@BindBean User user);
 
-    public User save(User user) {
-        return persist(user);
-    }
+    @SqlUpdate("UPDATE users SET first_name = :firstName, last_name = :lastName, email = :email WHERE id = :id;")
+    int updateById(@BindBean User user);
 
-    public void delete(User user) {
-        namedQuery("User.remove").setParameter("id", user.getId()).executeUpdate();
-    }
+    @SqlUpdate("DELETE FROM users WHERE id = :id")
+    int deleteById(@Bind("id") long id);
 }

@@ -2,34 +2,22 @@ package com.joshuahunschejones;
 
 import com.joshuahunschejones.config.Configuration;
 import com.joshuahunschejones.resource.UserResource;
-import io.dropwizard.db.PooledDataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
+import org.jdbi.v3.core.Jdbi;
 
 public class Application extends io.dropwizard.Application<Configuration> {
-
-    private final HibernateBundle<Configuration> hibernateBundle = new HibernateBundle<Configuration>(User.class) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(Configuration configuration) {
-            return configuration.getDataSourceFactory();
-        }
-    };
 
     public static void main(final String[] args) throws Exception {
         new Application().run(args);
     }
 
     @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
-        bootstrap.addBundle(hibernateBundle);
-    }
-
-    @Override
     public void run(final Configuration configuration, final Environment environment) {
-        final UserDAO userDAO = new UserDAO(hibernateBundle.getSessionFactory());
+        final Jdbi jdbi = new JdbiFactory().build(environment, configuration.getDataSourceFactory(), "MySQL");
+        final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
         environment.jersey().register(new UserResource(userDAO));
 
-        environment.healthChecks().register("HealthCheck", new HealthCheck());
+        environment.healthChecks().register("API", new HealthCheck());
     }
 }
