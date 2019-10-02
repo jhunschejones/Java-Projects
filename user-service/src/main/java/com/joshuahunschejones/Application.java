@@ -5,6 +5,8 @@ import com.joshuahunschejones.resource.UserResource;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
 import org.jdbi.v3.core.Jdbi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 

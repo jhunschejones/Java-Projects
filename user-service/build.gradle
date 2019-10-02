@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.adarshr.test-logger' version '1.7.0'
 }
 
 group 'com.joshuahunschejones'
@@ -15,11 +16,36 @@ dependencies {
     compile "io.dropwizard:dropwizard-core:${project['dropwizard.version']}"
     compile "io.dropwizard:dropwizard-jdbi3:${project['dropwizard.version']}"
     compile "mysql:mysql-connector-java:${project['mysql-connector.version']}"
+    compile "org.slf4j:slf4j-api:${project['slf4j.version']}"
+
+    runtime "org.slf4j:log4j-over-slf4j:${project['slf4j.version']}"
+    runtime "org.slf4j:jcl-over-slf4j:${project['slf4j.version']}"
+
     testCompile "junit:junit:${project['junit.version']}"
+    testCompile "org.mockito:mockito-core:${project['mockito.version']}"
+    testCompile "io.dropwizard:dropwizard-testing:${project['dropwizard.version']}"
 }
 
 task run(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.joshuahunschejones.Application'
     args 'server', 'config.yml'
+}
+
+testlogger {
+    theme 'mocha'
+    showExceptions true
+    showStackTraces true
+    showFullStackTraces false
+    showCauses true
+    slowThreshold 2000
+    showSummary true
+    showSimpleNames false
+    showPassed true
+    showSkipped true
+    showFailed true
+    showStandardStreams false
+    showPassedStandardStreams true
+    showSkippedStandardStreams true
+    showFailedStandardStreams true
 }

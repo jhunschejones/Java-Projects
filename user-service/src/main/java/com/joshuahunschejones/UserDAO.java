@@ -25,7 +25,7 @@ public interface UserDAO {
     int create(@BindBean User user);
 
     @SqlUpdate("UPDATE users SET first_name = :firstName, last_name = :lastName, email = :email WHERE id = :id;")
-    int updateById(@BindBean User user);
+    int update(@BindBean User user);
 
     @SqlUpdate("DELETE FROM users WHERE id = :id")
     int deleteById(@Bind("id") long id);

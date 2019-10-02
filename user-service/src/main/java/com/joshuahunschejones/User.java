@@ -1,10 +1,19 @@
 package com.joshuahunschejones;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
 
+    @JsonProperty
     private long id;
+
+    @JsonProperty
     private String firstName;
+
+    @JsonProperty
     private String lastName;
+
+    @JsonProperty
     private String email;
 
     // empty constructor required by Jackson deserialization
