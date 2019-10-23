@@ -1,4 +1,4 @@
-package com.joshuahunschejones;
+package com.joshuahunschejones.user;
 
 import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;

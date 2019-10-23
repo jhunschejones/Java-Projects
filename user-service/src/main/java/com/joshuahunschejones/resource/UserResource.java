@@ -1,7 +1,7 @@
 package com.joshuahunschejones.resource;
 
-import com.joshuahunschejones.User;
-import com.joshuahunschejones.UserDAO;
+import com.joshuahunschejones.user.User;
+import com.joshuahunschejones.user.UserDAO;
 import io.dropwizard.jersey.params.LongParam;
 
 import javax.ws.rs.*;

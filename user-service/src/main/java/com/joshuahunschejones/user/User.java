@@ -1,4 +1,4 @@
-package com.joshuahunschejones;
+package com.joshuahunschejones.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

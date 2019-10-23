@@ -2,8 +2,8 @@ package com.joshuahunschejones.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.joshuahunschejones.User;
-import com.joshuahunschejones.UserDAO;
+import com.joshuahunschejones.user.User;
+import com.joshuahunschejones.user.UserDAO;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -38,8 +38,6 @@ public class UserResourceTest {
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new UserResource(userDAO))
             .build();
-
-    private ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
     @Before
     public void setUp() {
