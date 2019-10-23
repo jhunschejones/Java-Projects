@@ -1,7 +1,7 @@
 # User Service
 
 ## Overview
-This is a basic web API using Dropwizard and Hibernate to fetch, create, and delete users. It also provides a "grants" resource, simulating a join table used in role based access control. 
+This is a basic web API using Dropwizard and JDBI to fetch, create, and delete users. It also provides a "grants" resource, simulating a join table used in role based access control. 
 
 ## In Action
 To launch the application, clone this folder and run:
