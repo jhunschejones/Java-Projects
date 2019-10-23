@@ -1,12 +1,13 @@
 package com.joshuahunschejones;
 
 import com.joshuahunschejones.config.Configuration;
+import com.joshuahunschejones.grant.GrantDAO;
+import com.joshuahunschejones.resource.GrantResource;
 import com.joshuahunschejones.resource.UserResource;
+import com.joshuahunschejones.user.UserDAO;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Environment;
 import org.jdbi.v3.core.Jdbi;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 
@@ -19,6 +20,8 @@ public class Application extends io.dropwizard.Application<Configuration> {
         final Jdbi jdbi = new JdbiFactory().build(environment, configuration.getDataSourceFactory(), "MySQL");
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
         environment.jersey().register(new UserResource(userDAO));
+        final GrantDAO grantDAO = jdbi.onDemand(GrantDAO.class);
+        environment.jersey().register(new GrantResource(grantDAO));
 
         environment.healthChecks().register("API", new HealthCheck());
     }
