@@ -1,11 +1,15 @@
 package com.joshuahunschejones.resource;
 
+import com.joshuahunschejones.grant.Grant;
 import com.joshuahunschejones.user.User;
 import com.joshuahunschejones.user.UserDAO;
+import com.joshuahunschejones.user.UserWithGrants;
 import io.dropwizard.jersey.params.LongParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +27,33 @@ public class UserResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Optional<User> getUser(@PathParam("id") LongParam id) {
-        return userDAO.findById(id.get());
+        Optional<User> user = userDAO.findById(id.get());
+        if (user.isPresent()) {
+            return user;
+        }
+        throw new WebApplicationException(Response.Status.NOT_FOUND);
+    }
+
+    @GET
+    @Path("/{id}/grants")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Optional<UserWithGrants> getUserWithGrants(@PathParam("id") LongParam id) {
+        Optional<UserWithGrants> userWithGrants = userDAO.findByIdWithGrants(id.get());
+        if (userWithGrants.isPresent()) {
+            return userWithGrants;
+        }
+
+        Optional<User> user = userDAO.findById(id.get());
+        if (user.isPresent()) {
+            return Optional.of(new UserWithGrants(
+                    user.get().getId(),
+                    user.get().getFirstName(),
+                    user.get().getLastName(),
+                    user.get().getEmail(),
+                    new ArrayList<Grant>()
+            ));
+        }
+        throw new WebApplicationException(Response.Status.NOT_FOUND);
     }
 
     @GET
@@ -74,7 +104,8 @@ public class UserResource {
 
         if (user.isPresent()) {
             userDAO.deleteById(id.get());
+            return user;
         }
-        return user;
+        throw new WebApplicationException(Response.Status.NOT_FOUND);
     }
 }

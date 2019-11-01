@@ -11,6 +11,7 @@ To launch the application, clone this folder and run:
 Routes:
 * POST `http://localhost:8080/users`: Create a user
 * GET `http://localhost:8080/users/{id}`: Fetch user by ID
+* GET `http://localhost:8080/users/{id}/grants`: Fetch user by ID with grants
 * GET `http://localhost:8080/users?name={name}`: Find user by first or last name
 * PUT `http://localhost:8080/users/{id}`: Update user by ID
 * GET `http://localhost:8080/users`: List all users
