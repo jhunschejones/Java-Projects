@@ -2,14 +2,15 @@ package com.joshuahunschejones.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.joshuahunschejones.grant.Grant;
 import com.joshuahunschejones.user.User;
 import com.joshuahunschejones.user.UserDAO;
+import com.joshuahunschejones.user.UserWithGrants;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
@@ -29,6 +30,8 @@ public class UserResourceTest {
     private final long newUserId = 0;
     private final long existingUserId = 100;
     private User newUser;
+    private Grant grant;
+    private UserWithGrants userWithGrants;
     private User existingUser;
     private User updatedUser;
     private ArrayList<User> existingUsers;
@@ -41,17 +44,8 @@ public class UserResourceTest {
 
     @Before
     public void setUp() {
-        newUser = new User();
-        newUser.setId(newUserId);
-        newUser.setFirstName("Test");
-        newUser.setLastName("User");
-        newUser.setEmail("new-user@newrelic.com");
-
-        existingUser = new User();
-        existingUser.setId(existingUserId);
-        existingUser.setFirstName("Existing");
-        existingUser.setLastName("User");
-        existingUser.setEmail("existing-user@newrelic.com");
+        newUser = new User(newUserId, "Test", "User","new-user@newrelic.com");
+        existingUser = new User(existingUserId, "Existing", "User", "existing-user@newrelic.com");
 
         updatedUser = new User();
         updatedUser.setFirstName("Updated");
@@ -60,6 +54,9 @@ public class UserResourceTest {
 
         existingUsers = new ArrayList<User>();
         existingUsers.add(newUser);
+
+        grant = new Grant(2, newUserId, 222, 2222);
+        userWithGrants = new UserWithGrants(existingUser.getId(), existingUser.getFirstName(), existingUser.getLastName(), existingUser.getEmail(), new ArrayList<Grant>() {{add(grant);}});
     }
 
     @After
@@ -82,6 +79,14 @@ public class UserResourceTest {
         Response response = resources.client().target("/users?name=" + existingUser.getFirstName()).request().get();
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.readEntity(String.class)).isEqualTo(mapper.writeValueAsString(existingUsers));
+    }
+
+    @Test
+    public void test_getUserWithGrants() throws JsonProcessingException {
+        when(userDAO.findByIdWithGrants(existingUserId)).thenReturn(java.util.Optional.ofNullable(userWithGrants));
+        Response response = resources.client().target("/users/100/grants").request().get();
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.readEntity(String.class)).isEqualTo(mapper.writeValueAsString(userWithGrants));
     }
 
     @Test
