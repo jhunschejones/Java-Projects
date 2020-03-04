@@ -1,0 +1,14 @@
+# Use default server ports
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8082
+
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password:
+  url: jdbc:mysql://localhost:3306/practice_ams_java

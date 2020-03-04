@@ -2,14 +2,15 @@ package com.joshuahunschejones.resource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.joshuahunschejones.Application;
+import com.joshuahunschejones.config.Configuration;
 import com.joshuahunschejones.grant.Grant;
 import com.joshuahunschejones.grant.GrantDAO;
+import io.dropwizard.testing.ResourceHelpers;
+import io.dropwizard.testing.junit.DropwizardAppRule;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.client.ClientProperties;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.ArgumentCaptor;
 
 import javax.ws.rs.client.Entity;
@@ -32,6 +33,10 @@ public class GrantResourceTest {
     private ObjectMapper mapper = new ObjectMapper();
     private ArgumentCaptor<Grant> grantCaptor = ArgumentCaptor.forClass(Grant.class);
 
+    @ClassRule
+    public static final DropwizardAppRule<Configuration> RULE =
+            new DropwizardAppRule<Configuration>(Application.class, "/Users/jjones/Documents/GitHub/Java-Projects/user-service/config.yml");
+
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new GrantResource(grantDAO))
@@ -49,7 +54,13 @@ public class GrantResourceTest {
     }
 
     @Test
-    public void test_index_with_userId_param() throws JsonProcessingException {
+    public void test_index_new_user() throws JsonProcessingException {
+        Response response = RULE.client().target("http://localhost:8080/grants?user_id=" + existingGrant.getUserId()).request().get();
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
+    @Test
+    public void getIndexForUserId() throws JsonProcessingException {
         when(grantDAO.findByUserId(existingGrant.getUserId())).thenReturn(new ArrayList<Grant>() {{ add(existingGrant); }});
         Response response = resources.client().target("/grants?user_id=" + existingGrant.getUserId()).request().get();
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
@@ -57,7 +68,7 @@ public class GrantResourceTest {
     }
 
     @Test
-    public void test_index_with_accountId_param() throws JsonProcessingException {
+    public void getIndexForAccountId() throws JsonProcessingException {
         when(grantDAO.findByAccountId(existingGrant.getAccountId())).thenReturn(new ArrayList<Grant>() {{ add(existingGrant); }});
         Response response = resources.client().target("/grants?account_id=" + existingGrant.getAccountId()).request().get();
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
