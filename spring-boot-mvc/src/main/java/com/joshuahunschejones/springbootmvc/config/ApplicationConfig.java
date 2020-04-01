@@ -1,4 +1,4 @@
-package com.joshuahunschejones.springbootmvc;
+package com.joshuahunschejones.springbootmvc.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

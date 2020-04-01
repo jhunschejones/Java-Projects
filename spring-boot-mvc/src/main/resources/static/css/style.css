@@ -592,17 +592,23 @@ section#registration {
 	background-color: #8f9305;
 }
 
+.search-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .productContainer {
 	padding: 10px;
 	margin: 10px;
+	display: flex;
+	flex-direction: column;
+	max-width: 350px;
 }
 
 .productContainerItem {
 	margin: 20px;
-	position: relative;
 	color: #fff;
-    float:left;
-	width: 25%;
 }
 
 .productContainerItem img {
