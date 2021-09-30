@@ -11,10 +11,10 @@
     <nav class="nav" role="navigation">
         <div class="container nav-elements">
             <div class="branding">
-                <a href="#home"><img src="images/hpluslogo.svg" alt="Logo - H Plus Sports"></a>
+                <a href="/"><img src="images/hpluslogo.svg" alt="Logo - H Plus Sports"></a>
             </div><!-- branding -->
             <ul class="navbar">
-                <li><a href="/home">home</a></li>
+                <li><a href="/">home</a></li>
                 <li><a href="/goToLogin">login</a></li>
                 <li><a href="/goToSearch">search</a></li>
                 <li><a href="redirect">linkedin</a></li>

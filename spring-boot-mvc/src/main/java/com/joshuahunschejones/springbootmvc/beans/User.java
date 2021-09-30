@@ -1,6 +1,8 @@
 package com.joshuahunschejones.springbootmvc.beans;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -20,7 +22,9 @@ public class User {
 
     @Pattern(regexp="((?=.*[A-Z]).{8,64})", message = "Password must have: uppercase, lowercase, and 8 - 64 characters")
     private String password;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @NotNull(message="Activity cannot be left empty")
     private String activity;
@@ -54,11 +58,11 @@ public class User {
         this.password = password;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 

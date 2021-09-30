@@ -1,5 +1,6 @@
 package com.joshuahunschejones.springbootmvc.controllers;
 
+import com.joshuahunschejones.springbootmvc.beans.Login;
 import com.joshuahunschejones.springbootmvc.beans.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,5 +40,10 @@ public class HomeController {
     @ModelAttribute("genderOptions")
     public List<String> getGenderOptions() {
         return Arrays.asList(new String[]{"Male", "Female", "Non-binary", "Prefer not to say"});
+    }
+
+    @ModelAttribute("login")
+    public Login getNewLogin() {
+        return new Login();
     }
 }
